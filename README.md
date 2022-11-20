@@ -1,4 +1,4 @@
-iot-garden
+nodered-iot-garden
 ==========
 
 ### About
