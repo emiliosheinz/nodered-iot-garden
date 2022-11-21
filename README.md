@@ -1,7 +1,18 @@
-nodered-iot-garden
+🌱 IoT Garden
 ==========
 
-### About
+## MQTT
 
-This is your project's README.md file. It helps users understand what your
-project does, how to use it and anything else they may need to know.
+- Broker: broker.hivemq.com
+- Porta TCP: 1883
+- Porta Websocket: 8000
+
+### Tópicos
+- iot-garden-parameters
+  ```json
+  {
+    "soilHumidity": 28,
+    "airHumidity": 30,
+    "airTemperature": 30
+  }
+  ```
