@@ -400,14 +400,14 @@
         "type": "function",
         "z": "7f1f0b300687486f",
         "name": "isAnEmergency",
-        "func": "const [data, maxHumidity, minHumidity] = msg.payload\n\nconst NOW = new Date().toISOString();\nconst PLACEHOLDER = \"{{PLACEHOLDER}}\";\n\nconst [, soilHumidity] = data.split(\",\").find((str = '') => str.startsWith('SOIL_HUMIDITY')).split(\" \")\n\nlet lowerOrHigherText;\nlet newMessage = {\n    topic: \"Alerta de Humidade da Horta\",\n    payload: `[${NOW}] Humidade do solo: ${soilHumidity}\\n A humidade do solo da horta está muito ${PLACEHOLDER} dos níveis esperados.`\n}\n\nif (soilHumidity < minHumidity) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"abaixo\");\n    return newMessage;\n}\nif (soilHumidity > maxHumidity) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"acima\");\n    return newMessage;\n}",
+        "func": "const [data, maxHumidity, minHumidity] = msg.payload\n\nconst NOW = new Date().toISOString();\nconst PLACEHOLDER = \"{{PLACEHOLDER}}\";\n\nconst [, soilHumidity] = data.split(\",\").find((str = '') => str.startsWith('SOIL_HUMIDITY')).split(\" \")\n\nconst newMessage = {\n    topic: \"Alerta de Humidade da Horta\",\n    payload: `[${NOW}] Humidade do solo: ${soilHumidity}\\n A humidade do solo da horta está acima dos níveis esperados. Certififique-se de que não há nenhum vazamento!`\n}\n\nif (soilHumidity > maxHumidity) {\n    return newMessage;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 940,
-        "y": 160,
+        "x": 1140,
+        "y": 240,
         "wires": [
             [
                 "50dd4eeba2032c74"
@@ -422,10 +422,10 @@
         "port": "587",
         "secure": false,
         "tls": false,
-        "name": "rafaelfumegalli@gmail.com",
+        "name": "emiliosheinz@gmail.com",
         "dname": "",
-        "x": 1260,
-        "y": 160,
+        "x": 1390,
+        "y": 240,
         "wires": []
     },
     {
@@ -659,6 +659,31 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 710,
+        "y": 240,
+        "wires": [
+            [
+                "887d4b2037226c7c"
+            ]
+        ]
+    },
+    {
+        "id": "887d4b2037226c7c",
+        "type": "delay",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "60",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 900,
         "y": 240,
         "wires": [
             [
