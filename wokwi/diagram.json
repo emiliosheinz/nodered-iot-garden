@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "author": "Rafael Fumegalli",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-franzininho-wifi",
+      "id": "franzininho",
+      "top": 48.9,
+      "left": 108.2,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-dht22",
+      "id": "dht1",
+      "top": 69.75,
+      "left": 37.86,
+      "attrs": { "humidity": "78.5", "temperature": "36.4" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 278.61,
+      "left": 131.37,
+      "rotate": 180,
+      "attrs": { "color": "red" }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "r1",
+      "top": 236.02,
+      "left": 115.43,
+      "rotate": 270,
+      "attrs": { "value": "1000" }
+    },
+    { "type": "wokwi-lcd1602", "id": "lcd1", "top": -129, "left": 112.25, "attrs": {} }
+  ],
+  "connections": [
+    [ "franzininho:5V.1", "dht1:VCC", "red", [ "h-0.24", "v69.23", "h-108.59" ] ],
+    [ "franzininho:21", "dht1:SDA", "green", [ "v58.44", "h-118.45", "v0.64" ] ],
+    [ "dht1:GND", "franzininho:GND.2", "black", [ "v2.81", "h61.88" ] ],
+    [ "franzininho:GND.3", "led1:C", "black", [ "v0" ] ],
+    [ "led1:A", "r1:1", "blue", [ "v0" ] ],
+    [ "r1:2", "franzininho:18", "blue", [ "h26.5", "v0.67" ] ]
+  ]
+}
