@@ -151,6 +151,36 @@
         "className": ""
     },
     {
+        "id": "489498c82727a17d",
+        "type": "ui_group",
+        "name": "Global Garden Config",
+        "tab": "53cd983c754bdca0",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "491085ce43a6eb57",
+        "type": "ui_tab",
+        "name": "Global Config",
+        "icon": "dashboard",
+        "disabled": true,
+        "hidden": true
+    },
+    {
+        "id": "a6b0d256dcba7746",
+        "type": "ui_group",
+        "name": "Alerts ",
+        "tab": "491085ce43a6eb57",
+        "order": 2,
+        "disp": true,
+        "width": "12",
+        "collapse": false,
+        "className": ""
+    },
+    {
         "id": "9a847be77c0152f5",
         "type": "mqtt in",
         "z": "7f1f0b300687486f",
@@ -163,14 +193,16 @@
         "rap": true,
         "rh": 0,
         "inputs": 0,
-        "x": 540,
+        "x": 200,
         "y": 440,
         "wires": [
             [
                 "b05749f3bb42398d",
                 "00005aaba021b093",
                 "cfd23472fed9db12",
-                "57dbd8200a17bf76"
+                "2cad277e58e9e83b",
+                "2382a473aa2bfe3f",
+                "300d38b1427fd1ed"
             ]
         ]
     },
@@ -368,14 +400,14 @@
         "type": "function",
         "z": "7f1f0b300687486f",
         "name": "isAnEmergency",
-        "func": "const MIN_SOIL_HUMIDITY = 20;\nconst MAX_SOIL_HUMIDITY = 60;\nconst NOW = new Date().toISOString();\nconst PLACEHOLDER = \"{{PLACEHOLDER}}\";\n\nconst { soilHumidity } = msg.payload;\nlet lowerOrHigherText;\nlet newMessage = {\n    topic: \"Alerta de Humidade da Horta\",\n    payload: `[${NOW}] Humidade do solo: ${soilHumidity}\\n A humidade do solo da horta está muito ${PLACEHOLDER} dos níveis esperados.`\n}\n\nif (soilHumidity < MIN_SOIL_HUMIDITY) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"abaixo\");\n    return newMessage;\n}\nif (soilHumidity > MAX_SOIL_HUMIDITY) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"acima\");\n    return newMessage;\n}",
+        "func": "const [data, maxHumidity, minHumidity] = msg.payload\n\nconst NOW = new Date().toISOString();\nconst PLACEHOLDER = \"{{PLACEHOLDER}}\";\n\nconst { soilHumidity } = data;\nlet lowerOrHigherText;\nlet newMessage = {\n    topic: \"Alerta de Humidade da Horta\",\n    payload: `[${NOW}] Humidade do solo: ${soilHumidity}\\n A humidade do solo da horta está muito ${PLACEHOLDER} dos níveis esperados.`\n}\n\nif (soilHumidity < minHumidity) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"abaixo\");\n    return newMessage;\n}\nif (soilHumidity > maxHumidity) {\n    newMessage.payload = newMessage.payload.replace(PLACEHOLDER, \"acima\");\n    return newMessage;\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 880,
-        "y": 280,
+        "x": 940,
+        "y": 160,
         "wires": [
             [
                 "50dd4eeba2032c74"
@@ -392,8 +424,246 @@
         "tls": false,
         "name": "rafaelfumegalli@gmail.com",
         "dname": "",
-        "x": 1200,
-        "y": 280,
+        "x": 1260,
+        "y": 120,
         "wires": []
+    },
+    {
+        "id": "7c39bce24a84806b",
+        "type": "function",
+        "z": "7f1f0b300687486f",
+        "name": "parseMessage",
+        "func": "console.log(msg)\n\nreturn {\n    payload: {\n        [msg.topic]: msg.payload\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 700,
+        "wires": [
+            [
+                "206f8c02492fb509"
+            ]
+        ]
+    },
+    {
+        "id": "206f8c02492fb509",
+        "type": "mqtt out",
+        "z": "7f1f0b300687486f",
+        "name": "iot-garden-global-config",
+        "topic": "iot-garden-global-config",
+        "qos": "0",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "591bf1f19ad5e29d",
+        "x": 1250,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "4aa5ce8c8264ab20",
+        "type": "ui_slider",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "label": "Minimum Garden Humidity",
+        "tooltip": "Minimum Garden Humidity",
+        "group": "489498c82727a17d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "MIN_HUMIDITY",
+        "topicType": "str",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 480,
+        "y": 680,
+        "wires": [
+            [
+                "3a6b63c7d64807e5"
+            ]
+        ]
+    },
+    {
+        "id": "d83bd56665c1daee",
+        "type": "ui_slider",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "label": "Maximum Garden Humidity",
+        "tooltip": "Maximum Garden Humidity",
+        "group": "489498c82727a17d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "MAX_HUMIDITY",
+        "topicType": "str",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 480,
+        "y": 740,
+        "wires": [
+            [
+                "3a6b63c7d64807e5"
+            ]
+        ]
+    },
+    {
+        "id": "3a6b63c7d64807e5",
+        "type": "file",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "filename": "topic",
+        "filenameType": "msg",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "utf8",
+        "x": 760,
+        "y": 700,
+        "wires": [
+            [
+                "7c39bce24a84806b"
+            ]
+        ]
+    },
+    {
+        "id": "dd9a4768c3fdae18",
+        "type": "mqtt in",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "topic": "get-iot-garden-global-config",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "591bf1f19ad5e29d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 480,
+        "y": 580,
+        "wires": [
+            [
+                "d5406fba21d6953e"
+            ]
+        ]
+    },
+    {
+        "id": "d5406fba21d6953e",
+        "type": "file in",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "filename": "payload",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 760,
+        "y": 620,
+        "wires": [
+            [
+                "5031eeaa6659c20d"
+            ]
+        ]
+    },
+    {
+        "id": "5031eeaa6659c20d",
+        "type": "function",
+        "z": "7f1f0b300687486f",
+        "name": "parseMessage",
+        "func": "return {\n    payload: {\n        [msg.filename]: msg.payload\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 640,
+        "wires": [
+            [
+                "206f8c02492fb509"
+            ]
+        ]
+    },
+    {
+        "id": "2cad277e58e9e83b",
+        "type": "file in",
+        "z": "7f1f0b300687486f",
+        "name": "Read MAX_HUMIDITY",
+        "filename": "MAX_HUMIDITY",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 460,
+        "y": 180,
+        "wires": [
+            [
+                "300d38b1427fd1ed"
+            ]
+        ]
+    },
+    {
+        "id": "2382a473aa2bfe3f",
+        "type": "file in",
+        "z": "7f1f0b300687486f",
+        "name": "Read MIN_HUMIDITY",
+        "filename": "MIN_HUMIDITY",
+        "filenameType": "str",
+        "format": "lines",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "utf8",
+        "allProps": false,
+        "x": 460,
+        "y": 240,
+        "wires": [
+            [
+                "300d38b1427fd1ed"
+            ]
+        ]
+    },
+    {
+        "id": "300d38b1427fd1ed",
+        "type": "join",
+        "z": "7f1f0b300687486f",
+        "name": "",
+        "mode": "custom",
+        "build": "array",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "3",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 710,
+        "y": 240,
+        "wires": [
+            [
+                "57dbd8200a17bf76"
+            ]
+        ]
     }
 ]
