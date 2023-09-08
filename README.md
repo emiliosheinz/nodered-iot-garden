@@ -24,7 +24,4 @@ This Node-RED code repository encapsulates the culmination of my Computer Scienc
   ```
     "MIN_HUMIDITY %.2f" | "MAX_HUMIDITY %.2f"
   ```
-
-## :man: Contributors
-- [@emiliosheinz](https://github.com/emiliosheinz)
-- [@fumegalli](https://github.com/fumegalli)
+  
